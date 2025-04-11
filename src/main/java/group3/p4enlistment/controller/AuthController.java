@@ -1,13 +1,17 @@
 package group3.p4enlistment.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.jpa.repository.JpaRepository;
 import group3.p4enlistment.model.*;
 import group3.p4enlistment.security.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
+
+import group3.p4enlistment.model.User;
 
 @RestController
 @RequestMapping("/auth")
@@ -15,10 +19,14 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private User userRepo;
+    private UserRepository userRepo;
 
     @Autowired
     private JWTUtilities jwtUtil;
+    
+    public interface UserRepository extends JpaRepository<User, Long> {
+        Optional<User> findByUsername(String username);
+    }
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody User user) {
@@ -38,3 +46,4 @@ public class AuthController {
     }
 
 }
+
